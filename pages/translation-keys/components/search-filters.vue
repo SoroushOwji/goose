@@ -1,3 +1,17 @@
+<script lang="ts" setup>
+defineProps<{
+  searchQuery: string;
+  dateRange: {
+    start: string;
+    end: string;
+  };
+  pageSize: number;
+  resetFilters: () => void;
+}>();
+
+defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
+</script>
+
 <template>
   <div class="search-filters">
     <label for="search" class="search-filters__label">Search:</label>
@@ -52,22 +66,6 @@
     </button>
   </div>
 </template>
-
-<script lang="ts" setup>
-import { defineProps, defineEmits } from "vue";
-
-defineProps<{
-  searchQuery: string;
-  dateRange: {
-    start: string;
-    end: string;
-  };
-  pageSize: number;
-  resetFilters: () => void;
-}>();
-
-defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
-</script>
 
 <style scoped lang="scss">
 .search-filters {

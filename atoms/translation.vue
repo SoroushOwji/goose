@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import type { TranslationValue } from "~/types.d";
-import { defineProps } from "vue";
 
 const languageToFlagMap: Record<string, string> = {
   "en-GB": "🇬🇧",
