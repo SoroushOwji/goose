@@ -1,10 +1,14 @@
 <script lang="ts" setup>
-import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits, computed } from "vue";
 
-defineProps<{
+const { totalCount, pageSize, currentPage } = defineProps<{
   currentPage: number;
   isLoading: boolean;
+  totalCount: number;
+  pageSize: number;
 }>();
+
+const lastPage = computed(() => Math.ceil(totalCount / pageSize));
 
 const emit = defineEmits(["increment", "decrement"]);
 </script>
@@ -20,11 +24,13 @@ const emit = defineEmits(["increment", "decrement"]);
       <span v-if="isLoading && currentPage === 1">...</span>
       <span v-else><</span>
     </button>
-    <span class="pagination__info">Page {{ currentPage }}</span>
+    <span class="pagination__info"
+      >Page {{ currentPage }} / {{ lastPage }}</span
+    >
     <button
       class="pagination__button"
       @click="emit('increment')"
-      :disabled="isLoading"
+      :disabled="currentPage === lastPage || isLoading"
       :aria-label="'Next Page'"
     >
       <span v-if="isLoading && currentPage > 1">...</span>
