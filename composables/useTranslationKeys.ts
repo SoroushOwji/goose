@@ -1,17 +1,16 @@
 import { ref } from "vue";
-
-type DirectusTranslation = {
-  key: string;
-  variables: null | string[];
-  translations: number[];
-};
+import type { DirectusTranslation } from "~/types.d";
 
 export function useTranslationKeys() {
   const translationKeys = ref<DirectusTranslation[]>([]);
   const isLoading = ref(false);
   const error = ref<null | string>(null);
 
-  const fetchTranslationKeys = async (filter = {}, page = 1, limit = 10) => {
+  async function fetchTranslationKeys<T>(
+    filter: Record<string, any> = {},
+    page: number = 1,
+    limit: number = 10
+  ) {
     isLoading.value = true;
 
     try {
@@ -20,48 +19,26 @@ export function useTranslationKeys() {
         limit: limit.toString(),
       }).toString();
 
-      const response = await fetch(
-        `https://directus.altura.io/items/translationKeys?${query}&filter=${JSON.stringify(
-          filter
-        )}`
-      );
+      const url = new URL("https://directus.altura.io/items/translationKeys");
+      url.searchParams.append("sort", "-createdAt");
+      url.searchParams.append("fields", "*,translations.*");
+      url.searchParams.append("page", page.toString());
+      url.searchParams.append("limit", limit.toString());
+      url.searchParams.append("filter", JSON.stringify(filter));
+
+      const response = await fetch(url.toString());
 
       if (!response.ok) {
         throw new Error(`Error: ${response.status} ${response.statusText}`);
       }
-      const data = await response.json();
-      translationKeys.value = data.data;
-      let string = "";
-      const allKeys = translationKeys.value
-        .map((translationKey) => `"${translationKey.key}"`)
-        .join(", ");
-      const translationKeysTranslation = await fetch(
-        `https://directus.altura.io/items/translationKeys_translations?filter={"translationKeys_key": {"_in":[${allKeys}]}}`
-      );
-      console.log({ translationKeysTranslation });
+      const { data } = await response.json();
+      translationKeys.value = data;
     } catch (err) {
       error.value = err instanceof Error ? err.message : String(err);
     } finally {
       isLoading.value = false;
     }
-  };
-
-  // async function fetchTranslationKeyTranslation() {
-  //   try {
-  //     const response = await fetch(
-  //       `https://directus.altura.io/items/translationKeys_translations?`
-  //     );
-  //     const data = await response.json();
-  //     console.log({ data });
-  //     // console.log({ response });
-  //   } catch (err) {
-  //     console.log(err);
-  //   } finally {
-  //     // isLoading.value = false;
-  //   }
-  // }
-
-  // fetchTranslationKeyTranslation();
+  }
 
   return { translationKeys, isLoading, error, fetchTranslationKeys };
 }
