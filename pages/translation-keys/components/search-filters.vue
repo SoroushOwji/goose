@@ -1,5 +1,7 @@
 <script lang="ts" setup>
-defineProps<{
+import { computed } from "vue";
+
+const { dateRange } = defineProps<{
   searchQuery: string;
   dateRange: {
     start: string;
@@ -10,12 +12,18 @@ defineProps<{
 }>();
 
 defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
+
+const isDateRangeIncomplete = computed(
+  () =>
+    (dateRange.start && !dateRange.end) || (!dateRange.start && dateRange.end)
+);
 </script>
 
 <template>
   <div class="search-filters">
     <label for="search" class="search-filters__label">Search:</label>
     <input
+      id="search"
       class="search-filters__input"
       type="text"
       :value="searchQuery"
@@ -24,7 +32,10 @@ defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
         $emit('update:searchQuery', ($event.target as HTMLInputElement).value)
       "
     />
+
+    <label for="start-date" class="search-filters__label">Start Date:</label>
     <input
+      id="start-date"
       class="search-filters__input"
       type="date"
       :value="dateRange.start"
@@ -35,10 +46,14 @@ defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
         })
       "
     />
+
+    <label for="end-date" class="search-filters__label">End Date:</label>
     <input
+      id="end-date"
       class="search-filters__input"
       type="date"
       :value="dateRange.end"
+      :disabled="!dateRange.start"
       @change="
         $emit('update:dateRange', {
           ...dateRange,
@@ -46,7 +61,14 @@ defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
         })
       "
     />
+
+    <p v-if="isDateRangeIncomplete" class="search-filters__validation">
+      Both start and end dates must be filled for the date range filter to work.
+    </p>
+
+    <label for="page-size" class="search-filters__label">Page Size:</label>
     <select
+      id="page-size"
       class="search-filters__input search-filters__select"
       :value="pageSize"
       @change="
@@ -61,6 +83,7 @@ defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
       <option value="30">30</option>
       <option value="50">50</option>
     </select>
+
     <button class="search-filters__reset-button" @click="resetFilters">
       Reset Filters
     </button>
@@ -70,8 +93,9 @@ defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
 <style scoped lang="scss">
 .search-filters {
   display: flex;
+  position: relative;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 2rem;
   align-items: center;
   padding: 10px;
 
@@ -103,6 +127,14 @@ defineEmits(["update:searchQuery", "update:dateRange", "update:pageSize"]);
     &:hover {
       background-color: #c0392b;
     }
+  }
+
+  &__validation {
+    color: #e74c3c;
+    font-size: 0.9rem;
+    margin-top: -5px;
+    position: absolute;
+    top: 3.5rem;
   }
 }
 </style>
