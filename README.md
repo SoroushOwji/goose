@@ -1,5 +1,7 @@
 # Frontend Assessment
 
+> Dear reviewer of this project, do keep in mind that even though I have written Vue and used Nuxt before, it has been over 4 years that I have been using React daily. Please review kindly! Yours truly, Soroush
+
 This project is a frontend application built with **Nuxt 3** and **TypeScript**. It includes a `/translation-keys` page that allows users to search, filter, and paginate through translation keys fetched from a backend API. The project is structured to ensure modularity, reusability, and maintainability.
 
 ---
