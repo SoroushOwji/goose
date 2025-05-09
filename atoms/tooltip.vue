@@ -1,21 +1,21 @@
 <template>
-  <div class="tooltip-container">
+  <div class="tooltip__container">
     <slot name="title"></slot>
-    <div class="tooltip">
+    <div class="tooltip__content">
       <slot name="tooltip"></slot>
     </div>
   </div>
 </template>
 
 <style scoped>
-.tooltip-container {
+.tooltip__container {
   position: relative;
   cursor: default;
 }
-.tooltip-container:hover .tooltip {
+.tooltip__container:hover .tooltip__content {
   display: block;
 }
-.tooltip {
+.tooltip__content {
   display: none;
   position: absolute;
   background-color: #333;

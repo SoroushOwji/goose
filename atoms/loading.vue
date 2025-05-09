@@ -1,12 +1,12 @@
 <template>
-  <div class="loading-container">
-    <div class="loading-spinner"></div>
-    <p class="loading-text">Loading...</p>
+  <div class="loading">
+    <div class="loading__spinner"></div>
+    <p class="loading__text">Loading...</p>
   </div>
 </template>
 
 <style scoped>
-.loading-container {
+.loading {
   position: absolute;
   top: 0;
   left: 0;
@@ -17,7 +17,7 @@
   align-items: center;
   background-color: rgba(255, 255, 255, 0.8);
 }
-.loading-spinner {
+.loading__spinner {
   border: 4px solid rgba(0, 0, 0, 0.1);
   border-radius: 50%;
   border-top: 4px solid #3498db;
@@ -25,7 +25,7 @@
   height: 20px;
   animation: spin 1s linear infinite;
 }
-.loading-text {
+.loading__text {
   margin-left: 10px;
   font-size: 16px;
   color: #3498db;
