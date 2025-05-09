@@ -135,7 +135,7 @@ Follow these steps to run the project locally:
 1. **Clone the Repository**:
 
    ```bash
-   git clone <repository-url>
+   git clone git@github.com:SoroushOwji/goose.git
    cd frontend-assessment-main
    ```
 
